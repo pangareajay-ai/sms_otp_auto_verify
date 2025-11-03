@@ -133,17 +133,20 @@ class SmsOtpAutoVerifyPlugin : FlutterPlugin, MethodChannel.MethodCallHandler,
             val task = client?.startSmsRetriever()
             task?.addOnSuccessListener {
                 unregister()
-                Log.d("SmsOtpAutoVerify", "SMS Retriever started")
+                receiver = SmsBroadcastReceiver()
                 receiver?.setSmsListener(this)
+    
                 val filter = IntentFilter(SmsRetriever.SMS_RETRIEVED_ACTION)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    activity?.registerReceiver(receiver, filter, Context.RECEIVER_EXPORTED)
+                    act.registerReceiver(receiver, filter, Context.RECEIVER_EXPORTED)
                 } else {
-                    activity?.registerReceiver(receiver, filter)
+                    act.registerReceiver(receiver, filter)
                 }
+                Log.d("SmsOtpAutoVerify", "SMS Retriever started successfully")
             }
         }
     }
+
 
 
     private fun unregister() {
