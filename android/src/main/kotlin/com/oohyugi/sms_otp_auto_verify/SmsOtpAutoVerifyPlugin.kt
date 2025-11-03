@@ -128,8 +128,8 @@ class SmsOtpAutoVerifyPlugin : FlutterPlugin, MethodChannel.MethodCallHandler,
     }
 
     private fun startListening() {
-        activity?.let {
-            client = SmsRetriever.getClient(it)
+        activity?.let { act ->
+            client = SmsRetriever.getClient(act)
             val task = client?.startSmsRetriever()
             task?.addOnSuccessListener {
                 unregister()
@@ -137,13 +137,14 @@ class SmsOtpAutoVerifyPlugin : FlutterPlugin, MethodChannel.MethodCallHandler,
                 receiver?.setSmsListener(this)
                 val filter = IntentFilter(SmsRetriever.SMS_RETRIEVED_ACTION)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    it.registerReceiver(receiver, filter, Context.RECEIVER_EXPORTED)
+                    activity?.registerReceiver(receiver, filter, Context.RECEIVER_EXPORTED)
                 } else {
-                    it.registerReceiver(receiver, filter)
+                    activity?.registerReceiver(receiver, filter)
                 }
             }
         }
     }
+
 
     private fun unregister() {
         alreadyCalledSmsRetrieve = false
