@@ -27,13 +27,25 @@ apply plugin: 'kotlin-android'
 android {
     compileSdkVersion 34
     namespace "com.oohyugi.sms_otp_auto_verify"
+    
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
     }
+    
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_11.toString()
+    }
+    
     defaultConfig {
         minSdkVersion 19
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+    
     lintOptions {
         disable 'InvalidPackage'
     }
